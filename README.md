@@ -1,7 +1,7 @@
 closure-bxr-starter
 ===================
 
-Starter [node.js](http://nodejs.org) project using [Closure Tools](http://developers.google.com/closure), [Bootstrap](http://getbootstrap.com), [Express](http://expressjs.com), and [RECESS](http://twitter.github.io/recess). Please feel free to [fork](http://help.github.com/articles/fork-a-repo) or [duplicate it](http://help.github.com/articles/duplicating-a-repository) to start your own project.
+Starter [node.js](http://nodejs.org) project using [Closure Tools](http://developers.google.com/closure), [Bootstrap](http://getbootstrap.com), [Express](http://expressjs.com), and [RECESS](http://twitter.github.io/recess). Designed for you to [fork](http://help.github.com/articles/fork-a-repo) or [duplicate](http://help.github.com/articles/duplicating-a-repository) it to start your own project.
 
 - **Closure Tools**: [JS compiler](https://developers.google.com/closure/compiler), [Soy templates](http://developers.google.com/closure/templates) for HTML (via [closure-pro-build](http://github.com/Lindurion/closure-pro-build) package)
 - **Bootstrap 3**: Mobile-first responsive layout CSS framework
@@ -18,15 +18,34 @@ NOT ready for use yet. Implementation in progres...
 
 Usage
 -----
-Build debug version (human-readable):
+(First time only) Install node.js package dependencies:
 
-    $ node build.js --debug
+    $ npm install
 
-Build release version (fully minified):
+Run lint checks for good code conventions & style (edit `lint.js` to customize checks):
 
-    $ node build.js
+    $ node lint.js
+
+Build your JS and CSS (include `--debug` for human-readable output):
+
+    $ node build.js [--debug]
+
+Run server:
+
+    $ node server.js [--debug] [--port=8080]
+
+Then view in a web browser at [http://localhost:8080/](http://localhost:8080/).
+
+You can either rerun `build.js` manually after making edits, or you can run a script to watch for changes to files under `src/` and automatically rebuild the project when any file is changed:
+
+    $ node watch.js [--debug]
 
 Customize input files and output directories for the project by editing `project-config.js`.
+
+
+### System Requirements ###
+
+Java and Python version 2 must be installed and part of the system path as `java` and `python` in order to run all Closure tools. These commands are also configurable; see [closure-pro-build documentation](http://github.com/Lindurion/closure-pro-build#system-requirements) for more details.
 
 
 License & Copyright
