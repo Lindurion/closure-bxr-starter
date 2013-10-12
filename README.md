@@ -10,9 +10,23 @@ Starter [node.js](http://nodejs.org) project using [Closure Tools](http://develo
 
 Also includes [jQuery 2](http://jquery.com) as part of Bootstrap support.
 
+
 Status
 ------
 NOT ready for use yet. Implementation in progres...
+
+
+Usage
+-----
+Build debug version (human-readable):
+
+    $ node build.js --debug
+
+Build release version (fully minified):
+
+    $ node build.js
+
+Customize input files and output directories for the project by editing `project-config.js`.
 
 
 License & Copyright

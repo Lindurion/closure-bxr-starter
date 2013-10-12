@@ -19,64 +19,24 @@ var commander = require('commander');
 var kew = require('kew');
 var lessBuilder = require('./less-builder.js');
 var mkdirp = require('mkdirp');
+var path = require('path');
+var projectConfig = require('./project-config.js');
 
 
 //==============================================================================
-// Command-Line
+// Options
 //==============================================================================
 
 commander.option('--debug', 'Build in debug mode').parse(process.argv);
 
-
-//==============================================================================
-// Project Configuration
-//==============================================================================
-
-var ROOT_SRC_DIR = 'src/';
-var tmpDir = 'tmp/';
-var tmpLessDir = tmpDir + (commander.debug ? 'debug/' : 'release/') + 'less/';
-
-// List of root 3rd party CSS files (relative to this directory).
-// Only need to include root files here; all files from @import will be
-// included automatically.
-//
-// CSS class names will NOT be obfuscated for these files (so you can refer to
-// them directly--don't use goog.getCssName() or {css} in Soy for class names).
-var LESS_INPUT_FILES_3P = [
-  '3p/bootstrap-3.0.0/less/bootstrap.less'
-];
-
-// For 3rd party CSS: directories to search for @import LESS & CSS files from.
-var LESS_INCLUDE_DIRS_3P = [
-  '3p/bootstrap-3.0.0/less/'
-];
-
-// List of root application LESS & CSS files (relative to this directory).
-// Only need to include root files here; all files from @import will be
-// included automatically.
-//
-// CSS class names from these input files will be obfuscated and must be
-// accessed with goog.getCssName() in JS and {css aClassName} in Soy.
-//
-// These files should NOT @import any 3rd party CSS from LESS_INPUT_FILES_3P
-// (though importing a 3rd party file that only includes LESS mixins--
-// including no style definitions--is okay).
-var LESS_INPUT_FILES_APP = [
-  ROOT_SRC_DIR + 'ui/main.less'
-];
-
-// For application CSS: directories to search for @import LESS & CSS files from.
-var LESS_INCLUDE_DIRS_APP = [ROOT_SRC_DIR];
-
-// Path to compiled CSS file for 3rd party CSS.
-var compiledLessFile3P = tmpLessDir + '3p.css';
-
-// Path to compiled CSS file for application CSS.
-var compiledLessFileApp = tmpLessDir + 'app.css';
+var tmpLessDir = path.join(projectConfig.OPTIONS.tempFileDir,
+    (commander.debug ? 'debug/' : 'release/'), 'less/');
+var compiledLessFile3P = path.join(tmpLessDir, '3p.css');
+var compiledLessFileApp = path.join(tmpLessDir, 'app.css');
 
 // The closure-pro-build project options.
 var projectOptions = {
-  rootSrcDir: ROOT_SRC_DIR,
+  rootSrcDir: projectConfig.OPTIONS.rootSrcDir,
   cssModule: {
     name: 'style',
     description: 'All CSS styles for the project',
@@ -91,7 +51,9 @@ var projectOptions = {
 // TODO: Add command-line args support for debug or release.
 var buildOptions = {
   type: commander.debug ? closureProBuild.DEBUG : closureProBuild.RELEASE,
-  tempFileDir: tmpDir
+  generatedCodeDir: projectConfig.OPTIONS.generatedCodeDir,
+  tempFileDir: projectConfig.OPTIONS.tempFileDir,
+  outputDir: projectConfig.OPTIONS.outputDir
 };
 
 
@@ -107,13 +69,20 @@ function makeTmpLessDir() {
 }
 
 function build3pCss() {
-  return lessBuilder.build(LESS_INPUT_FILES_3P, LESS_INCLUDE_DIRS_3P,
-      {debug: commander.debug}, compiledLessFile3P);
+  return lessBuilder.build(projectConfig.CSS_3P.inputFiles,
+      projectConfig.CSS_3P.includeDirs, {debug: commander.debug},
+      compiledLessFile3P);
+}
+
+function prependRootSrcDir(fileOrDir) {
+  return path.join(projectConfig.OPTIONS.rootSrcDir, fileOrDir);
 }
 
 function buildAppCss() {
-  return lessBuilder.build(LESS_INPUT_FILES_APP, LESS_INCLUDE_DIRS_APP,
-      {debug: commander.debug}, compiledLessFileApp);
+  var inputFiles = projectConfig.CSS_APP.inputFiles.map(prependRootSrcDir);
+  var includeDirs = projectConfig.CSS_APP.includeDirs.map(prependRootSrcDir);
+  return lessBuilder.build(inputFiles, includeDirs, {debug: commander.debug},
+      compiledLessFileApp);
 }
 
 function buildClosureProject() {
