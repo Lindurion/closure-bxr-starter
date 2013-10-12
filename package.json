@@ -1,0 +1,37 @@
+{
+  "name": "closure-bxr-starter",
+  "version": "0.0.1",
+  "private": "true",
+  "description": "Starter node.js project using Closure Tools, Bootstrap, Express, and RECESS.",
+  "keywords": [
+    "closure",
+    "bootstrap",
+    "express",
+    "recess",
+    "soy",
+    "node"
+  ],
+  "homepage": "http://github.com/Lindurion/closure-bxr-starter",
+  "bugs": "http://github.com/Lindurion/closure-bxr-starter/issues",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/Lindurion/closure-bxr-starter.git"
+  },
+  "author": {
+    "name": "Eric W. Barndollar",
+    "email": "eric@EricWBarndollar.com",
+    "url": "https://github.com/Lindurion"
+  },
+  "dependencies": {
+    "closure-pro-build": ">=0.0.1 <1.0"
+  },
+  "engines": {
+    "node": ">=0.10.3"
+  },
+  "licenses": [
+    {
+      "type": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  ]
+}

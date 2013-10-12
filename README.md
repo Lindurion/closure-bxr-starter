@@ -3,7 +3,7 @@ closure-bxr-starter
 
 Starter [node.js](http://nodejs.org) project using [Closure Tools](http://developers.google.com/closure), [Bootstrap](http://getbootstrap.com), [Express](http://expressjs.com), and [RECESS](http://twitter.github.io/recess). Please feel free to [fork](http://help.github.com/articles/fork-a-repo) or [duplicate it](http://help.github.com/articles/duplicating-a-repository) to start your own project.
 
-- **Closure Tools**: [JS compiler](https://developers.google.com/closure/compiler), [Soy templates](http://developers.google.com/closure/templates) for HTML
+- **Closure Tools**: [JS compiler](https://developers.google.com/closure/compiler), [Soy templates](http://developers.google.com/closure/templates) for HTML (via [closure-pro-build](http://github.com/Lindurion/closure-pro-build) package)
 - **Bootstrap 3**: Mobile-first responsive layout CSS framework
 - **Express 3**: Node.js HTTP server & web application framework
 - **RECESS**: CSS & [LESS](http://lesscss.org) compiler supporting color constants, functions, mixins, etc.
