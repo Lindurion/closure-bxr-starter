@@ -14,7 +14,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-var closureProBuild = require('closure-pro-build');
+var closureProjectBuilder = require('./closure-project-builder.js');
 var commander = require('commander');
 var kew = require('kew');
 var lessBuilder = require('./less-builder.js');
@@ -33,28 +33,6 @@ var tmpLessDir = path.join(projectConfig.OPTIONS.tempFileDir,
     (commander.debug ? 'debug/' : 'release/'), 'less/');
 var compiledLessFile3P = path.join(tmpLessDir, '3p.css');
 var compiledLessFileApp = path.join(tmpLessDir, 'app.css');
-
-// The closure-pro-build project options.
-var projectOptions = {
-  rootSrcDir: projectConfig.OPTIONS.rootSrcDir,
-  cssModule: {
-    name: 'style',
-    description: 'All CSS styles for the project',
-    closureInputFiles: [compiledLessFileApp],
-    dontCompileInputFiles: [compiledLessFile3P]
-  },
-  // TODO: Add JS modules, including app JS and 3p jQuery.
-  jsModules: {}
-};
-
-// The closure-pro-build build options.
-// TODO: Add command-line args support for debug or release.
-var buildOptions = {
-  type: commander.debug ? closureProBuild.DEBUG : closureProBuild.RELEASE,
-  generatedCodeDir: projectConfig.OPTIONS.generatedCodeDir,
-  tempFileDir: projectConfig.OPTIONS.tempFileDir,
-  outputDir: projectConfig.OPTIONS.outputDir
-};
 
 
 //==============================================================================
@@ -86,11 +64,8 @@ function buildAppCss() {
 }
 
 function buildClosureProject() {
-  // TODO: Switch to kew.nfcall() when next version of kew is pushed to npm.
-  var promise = kew.defer();
-  closureProBuild.build(projectOptions, buildOptions,
-      promise.makeNodeResolver());
-  return promise;
+  return closureProjectBuilder.build(compiledLessFileApp, compiledLessFile3P,
+      {debug: commander.debug});
 }
 
 
