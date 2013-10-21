@@ -12,10 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('cbxrs.ui.page');
+// Some sample LESS for hello world project purposes:
+@pageBgColor: #eef;
 
-goog.require('cbxrs.ui.page.soy');
 
+body {
+  background-color: @pageBgColor;
+}
 
-// Exported templates for use on server:
-goog.exportSymbol('cbxrs.ui.page.soy.main', cbxrs.ui.page.soy.main);
+.mainHeader {
+  font-family: Georgia;
+  color: #06c;
+}

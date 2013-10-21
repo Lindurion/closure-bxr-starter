@@ -14,24 +14,17 @@
  * limitations under the License.
  */
 
-{namespace cbxrs.ui.page.soy autoescape="contextual"}
+{namespace cbxrs.ui.hello.soy.hellobox autoescape="contextual"}
 
 
-/** Shell HTML page for sample closure-bxr-starter app. */
-{template .main}
-  <!DOCTYPE html>
-  <html lang="en">
-  <head>
-    <title>Sample closure-bxr-starter app</title>
-    <link rel="stylesheet" href="style.css">
-  </head>
-  <body>
-    <h1 class="{css mainHeader}">closure-bxr-starter</h1>
-    <p>TODO: {msg desc="Sample translatable message"}Build site{/msg}</p>
-
-    <div id="contentArea"></div>
-
-    <script src="main.js"></script>
-  </body>
-  </html>
+/**
+ * A hello world box for a hello world Closure component.
+ * @param thing The thing to say hello to.
+ */
+{template .element}
+  <div class="{css helloBox}">
+    {msg desc="Says hello to something or someone"}
+      Hello there {$thing}!
+    {/msg}
+  </div>
 {/template}

@@ -12,22 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Some sample LESS for hello world project purposes:
-@pageBgColor: #eef;
+goog.provide('cbxrs.ui.main');
+
+goog.require('cbxrs.ui.hello.HelloBox');
+goog.require('goog.dom');
 
 
-body {
-  background-color: @pageBgColor;
-}
+/** Client-side JS application entry point. */
+cbxrs.ui.main = function() {
+  var helloBox = new cbxrs.ui.hello.HelloBox('closure-bxr-starter');
 
-.helloWorldBox {
-  width: 600px;
-  padding: 20px;
-  margin: 0 auto;
-  background-color: #ccc;
-}
+  var contentEl = goog.dom.getElement('contentArea');
+  helloBox.render(contentEl);
+};
 
-.mainHeader {
-  font-family: Georgia;
-  color: #06c;
-}
+
+cbxrs.ui.main();

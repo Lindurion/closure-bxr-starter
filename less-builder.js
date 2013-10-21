@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+var closureProBuild = require('closure-pro-build');
 var fs = require('fs');
 var kew = require('kew');
 var recess = require('recess');
@@ -26,8 +27,22 @@ var recess = require('recess');
  * @return {!Promise} Tracks success/failure of LESS compilation.
  */
 function build(inputFiles, includeDirs, options, outputFile) {
-  return compile(inputFiles, includeDirs, options)
-      .then(writeCssToFile.bind(null, outputFile));
+  return resolveLessInputFiles(inputFiles)
+      .then(function(resolvedInputFiles) {
+        return compile(resolvedInputFiles, includeDirs, options);
+      }).then(writeCssToFile.bind(null, outputFile));
+}
+
+
+/**
+ * @param {!Array.<string>} inputFiles Files and glob patterns.
+ * @return {!Promise.<!Array.<string>>} Yields resolved file list.
+ */
+function resolveLessInputFiles(inputFiles) {
+  // TODO: Switch to kew.nfcall() when next version of kew is pushed to npm.
+  var promise = kew.defer();
+  closureProBuild.expandFileGlobs(inputFiles, '.', promise.makeNodeResolver());
+  return promise;
 }
 
 

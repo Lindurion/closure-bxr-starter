@@ -49,8 +49,7 @@ function getProjectOptions(compiledLessFileApp, compiledLessFile3P) {
       closureInputFiles: [compiledLessFileApp],
       dontCompileInputFiles: [compiledLessFile3P]
     },
-    // TODO: Add JS modules, including app JS and 3p jQuery.
-    jsModules: {}
+    jsModules: projectConfig.JS_MODULES
   };
 }
 

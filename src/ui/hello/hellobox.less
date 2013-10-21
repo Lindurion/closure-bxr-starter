@@ -12,10 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('cbxrs.ui.page');
+// Styles for Hello Box:
+@helloBoxBgColor: #3c3;
 
-goog.require('cbxrs.ui.page.soy');
 
-
-// Exported templates for use on server:
-goog.exportSymbol('cbxrs.ui.page.soy.main', cbxrs.ui.page.soy.main);
+.helloBox {
+  background-color: @helloBoxBgColor;
+  border-radius: 8px;
+  margin: 0 auto;
+  padding: 40px;
+  width: 400px;
+}
