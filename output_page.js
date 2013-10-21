@@ -1,9 +1,15 @@
 #!/usr/bin/env node
 
+// Note: This file is temporary, for testing, until express server is ready.
+
+var commander = require('commander');
 var fs = require('fs');
 
-// Read and eval library
-filedata = fs.readFileSync('./build/debug/page.js', 'utf8');
-eval(filedata);
+commander.option('--debug', 'Build in debug mode').parse(process.argv);
+var dir = commander.debug ? 'debug' : 'release';
 
-console.log(this['cbxrs']['ui']['page']['soy']['main']());
+// Read and eval library.
+filedata = fs.readFileSync('./build/' + dir + '/page.js', 'utf8');
+(function() { eval.call(this, filedata); })();
+
+console.log(cbxrs.ui.page.soy.main());
