@@ -49,7 +49,8 @@ function getProjectOptions(compiledLessFileApp, compiledLessFile3P) {
       closureInputFiles: [compiledLessFileApp],
       dontCompileInputFiles: [compiledLessFile3P]
     },
-    jsModules: projectConfig.JS_MODULES
+    jsModules: projectConfig.JS_MODULES,
+    jsExterns: projectConfig.JS_EXTERNS
   };
 }
 

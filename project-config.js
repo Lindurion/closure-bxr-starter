@@ -1,3 +1,6 @@
+var closureProBuild = require('closure-pro-build');
+
+
 //==============================================================================
 // Project Configuration
 //==============================================================================
@@ -50,14 +53,23 @@ var JS_MODULES = {
   },
   main: {
     description: 'Main JS module, with all client-side JS',
+    nonClosureNamespacedInputFiles: ['3p/bootstrap-3.0.0/js/bootstrap.js'],
     closureRootNamespaces: ['cbxrs.ui.main']
   }
 };
+
+
+// Externs files that define symbols loaded via external JavaScript so that the
+// Closure Compiler understands these types (and won't rename these symbols).
+// Especially useful for loading 3rd party libraries like jQuery via a CDN
+// <script> tag.
+var JS_EXTERNS = [closureProBuild.EXTERNS['jquery-1.9']];
 
 
 module.exports = {
   OPTIONS: OPTIONS,
   CSS_APP: CSS_APP,
   CSS_3P: CSS_3P,
+  JS_EXTERNS: JS_EXTERNS,
   JS_MODULES: JS_MODULES
 };
