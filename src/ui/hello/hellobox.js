@@ -15,30 +15,70 @@
 goog.provide('cbxrs.ui.hello.HelloBox');
 
 goog.require('cbxrs.ui.hello.soy.hellobox');
+goog.require('goog.events.EventType');
 goog.require('goog.soy');
 goog.require('goog.ui.Component');
 
 
+
 /**
  * Hello world Closure component.
+ * @param {string} letter The initial letter that stands for the thing.
  * @param {string} thing The thing to say hello to.
+ * @param {string} learnMoreUrl To link to on learn more button press.
  * @constructor
  * @extends {goog.ui.Component}
  */
-cbxrs.ui.hello.HelloBox = function(thing) {
+cbxrs.ui.hello.HelloBox = function(letter, thing, learnMoreUrl) {
   goog.base(this);
 
-  /** @private {string} */
+  /**
+   * @type {string}
+   * @private
+   */
+  this.letter_ = letter;
+
+  /**
+   * @type {string}
+   * @private
+   */
   this.thing_ = thing;
+
+  /**
+   * @type {string}
+   * @private
+   */
+  this.learnMoreUrl_ = learnMoreUrl;
 };
 goog.inherits(cbxrs.ui.hello.HelloBox, goog.ui.Component);
 
 
 /** @override */
 cbxrs.ui.hello.HelloBox.prototype.createDom = function() {
+  var params = {
+    letter: this.letter_,
+    thing: this.thing_
+  };
+
   this.setElementInternal(goog.soy.renderAsElement(
-      cbxrs.ui.hello.soy.hellobox.element, {thing: this.thing_}));
+      cbxrs.ui.hello.soy.hellobox.element, params));
 };
 
 
-// TODO: Add click event handling for something...
+/** @override */
+cbxrs.ui.hello.HelloBox.prototype.enterDocument = function() {
+  // Search for the .helloButton element located within this component.
+  var buttonEl = this.getElementByClass(goog.getCssName('helloButton'));
+
+  // Listen for button press.
+  this.getHandler().listen(buttonEl, goog.events.EventType.CLICK,
+      this.handleLearnMore_);
+};
+
+
+/** @private */
+cbxrs.ui.hello.HelloBox.prototype.handleLearnMore_ = function() {
+  // In this case, a simple <a> would have sufficed, but using a full-blown JS
+  // event handler just for demo purposes.
+  window.location.href = this.learnMoreUrl_;
+};

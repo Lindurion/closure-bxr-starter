@@ -12,15 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Some sample LESS for hello world project purposes:
-@pageBgColor: #eef;
+/** Some sample LESS for hello world project purposes. */
+
+@import "ui/colors.less";
 
 
 body {
-  background-color: @pageBgColor;
+  font-family: arial;
+  padding-top: 50px;  // Leave room for top fixed navbar.
+}
+
+h1,h2,h3,h4,h5,h6 {
+  font-family: Georgia;
 }
 
 .mainHeader {
-  font-family: Georgia;
-  color: #06c;
+  color: @headerColor !important;  // To override Bootstrap jumbotron style.
 }

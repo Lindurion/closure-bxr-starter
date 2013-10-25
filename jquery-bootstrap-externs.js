@@ -12,9 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import "ui/colors.less";
+/**
+ * @fileoverview Extra externs for jQuery as used by Bootstrap (which uses some
+ * non-public API functions... tsk tsk tsk ;)
+ */
 
-.helloLetter {
-  color: @headerColor;
-  font-weight: bold;
-}
+
+/**
+ * @param {string} str
+ * @return {string}
+ * @nosideeffects
+ */
+jQuery.prototype.camelCase = function(str) {};

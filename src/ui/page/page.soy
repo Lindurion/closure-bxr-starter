@@ -22,16 +22,72 @@
   <!DOCTYPE html>
   <html lang="en">
   <head>
-    <title>Sample closure-bxr-starter app</title>
+    <meta charset="UTF-8">
+    <title>{msg desc="Page title"}Sample closure-bxr-starter site{/msg}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
   </head>
   <body>
-    <h1 class="{css mainHeader}">closure-bxr-starter</h1>
-    <p>TODO: {msg desc="Sample translatable message"}Build site{/msg}</p>
+    {call .navbar_ /}
+    {call .jumboHeader_ /}
 
-    <div id="contentArea"></div>
+    <div class="container">
+      <!-- main.js dynamically adds content within #contentArea... There is no reason it couldn't be
+           server-side rendered in this case, but done this way for demo purposes. -->
+      <div id="contentArea" class="row"></div>
+    </div>
 
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
     <script src="main.js"></script>
   </body>
   </html>
+{/template}
+
+
+/** Renders Bootstrap collapsable navigation bar. */
+{template .navbar_ private="true"}
+  <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">closure-bxr-starter</a>
+      </div>
+
+      <div class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="#">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+{/template}
+
+
+/** Renders the page header UI section. */
+{template .jumboHeader_ private="true"}
+  <div class="jumbotron">
+    <div class="container">
+      <h1 class="{css mainHeader}">
+        {msg desc="Main page header"}Hello, Closure and Bootstrap!{/msg}
+      </h1>
+      <p>
+        {msg desc="Introductory content describing libraries and tools for this starter project"}
+          This is a starter project/page you can use to start building your own projects using{sp}
+          <a href="http://developers.google.com/closure">Closure Tools</a> and{sp}
+          <a href="http://getbootstrap.com">Bootstrap</a>. You can use{sp}
+          <a href="http://developers.google.com/closure/library">Closure JS Library</a> components
+          to build your UI if you'd like&mdash;or just stick with{sp}
+          <a href="http://jquery.com">jQuery</a> or whatever else you're already familiar with.
+          The <a href="http://developers.google.com/closure/compiler">Closure JS Compiler</a> is a
+          huge benefit either way.
+        {/msg}
+      </p>
+    </div>
+  </div>
 {/template}

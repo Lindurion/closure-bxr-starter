@@ -18,13 +18,20 @@
 
 
 /**
- * A hello world box for a hello world Closure component.
+ * A hello world box with a learn more button for a hello world Closure + Bootstrap component.
+ * @param letter The initial letter that stands for the thing.
  * @param thing The thing to say hello to.
  */
 {template .element}
-  <div class="{css helloBox}">
-    {msg desc="Says hello to something or someone"}
-      Hello there {$thing}!
-    {/msg}
+  <div class="col-sm-4">
+    <h2><span class="{css helloLetter}">{$letter}</span> - {$thing}</h2>
+    <p>
+      {msg desc="Description for component to let the user learn more about a
+          specific thing (such as a product or service)."}
+        I'm a Closure component inside a Bootstrap grid! And I've got Bootstrap button style. I can
+        hook you up with more info about {$thing}.
+      {/msg}
+    </p>
+    <p><button type="button" class="btn btn-info {css helloButton}">Learn more &raquo;</button></p>
   </div>
 {/template}
