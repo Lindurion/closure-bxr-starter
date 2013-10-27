@@ -11,11 +11,6 @@ Starter [node.js](http://nodejs.org) project using [Closure Tools](http://develo
 Also includes [jQuery 1.9](http://jquery.com) as part of Bootstrap support.
 
 
-Status
-------
-NOT ready for use yet. Implementation in progres...
-
-
 Usage
 -----
 (First time only) Install node.js package dependencies:

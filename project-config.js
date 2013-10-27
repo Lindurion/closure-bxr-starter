@@ -69,10 +69,18 @@ var JS_EXTERNS = [
 ];
 
 
+// Any custom options to RECESS API.
+// See http://github.com/twitter/recess#programmatic-api for option docs.
+// For example {strictPropertyOrder: false} will make RECESS lint stop yelling
+// about CSS property ordering.
+var CUSTOM_RECESS_OPTIONS = {};
+
+
 module.exports = {
   OPTIONS: OPTIONS,
   CSS_APP: CSS_APP,
   CSS_3P: CSS_3P,
+  CUSTOM_RECESS_OPTIONS: CUSTOM_RECESS_OPTIONS,
   JS_EXTERNS: JS_EXTERNS,
   JS_MODULES: JS_MODULES
 };

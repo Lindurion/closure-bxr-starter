@@ -15,6 +15,7 @@
 var closureProBuild = require('closure-pro-build');
 var fs = require('fs');
 var kew = require('kew');
+var projectConfig = require('./project-config.js');
 var recess = require('recess');
 var underscore = require('underscore');
 
@@ -23,15 +24,19 @@ var underscore = require('underscore');
  * Compiles inputFiles using RECESS and writes to outputFile.
  * @param {!Array.<string>} inputFiles
  * @param {!Array.<string>} includeDirs
- * @param {!{debug: boolean}} options
- * @param {string} outputFile
+ * @param {!{debug: boolean, lintMode: (boolean|undefined)}} options
+ * @param {?string} outputFile (May be null for lintMode).
  * @return {!Promise} Tracks success/failure of LESS compilation.
  */
 function build(inputFiles, includeDirs, options, outputFile) {
   return resolveLessInputFiles(inputFiles)
       .then(function(resolvedInputFiles) {
         return compile(resolvedInputFiles, includeDirs, options);
-      }).then(underscore.partial(writeCssToFile, outputFile));
+      })
+      .then(underscore.partial(outputCssOrLintResults, options, outputFile))
+      .fail(function(e) {
+        throw new Error('Had errors building LESS/CSS:\n' + JSON.stringify(e));
+      });
 }
 
 
@@ -50,16 +55,17 @@ function resolveLessInputFiles(inputFiles) {
 /**
  * @param {!Array.<string>} inputFiles
  * @param {!Array.<string>} includeDirs
- * @param {!{debug: boolean}} options
+ * @param {!{debug: boolean, lintMode: (boolean|undefined)}} options
  * @return {!Promise} Yields RECESS compiled results on success.
  */
 function compile(inputFiles, includeDirs, options) {
   var recessOptions = {
-    compile: true,
+    compile: !options.lintMode,
     compress: !options.debug,
     includePath: includeDirs,
     prefixWhitespace: false
   };
+  underscore.extend(recessOptions, projectConfig.CUSTOM_RECESS_OPTIONS);
 
   // TODO: Switch to kew.nfcall() when next version of kew is pushed to npm.
   var promise = kew.defer();
@@ -69,16 +75,52 @@ function compile(inputFiles, includeDirs, options) {
 
 
 /**
- * @param {string} outputFile
+ * @param {!{debug: boolean, lintMode: (boolean|undefined)}} options
+ * @param {?string} outputFile (May be null for lintMode).
  * @param {!Array.<!RECESS>} compiledResults
- * @return {!Promise} Tracks success/failure of written file.
+ * @return {!Promise} Tracks success/failure.
  */
-function writeCssToFile(outputFile, compiledResults) {
+function outputCssOrLintResults(options, outputFile, compiledResults) {
+  if (options.lintMode) {
+    return outputLintResults(compiledResults);
+  }
+
   // TODO: Switch to kew.nfcall() when next version of kew is pushed to npm.
   var promise = kew.defer();
   fs.writeFile(outputFile, getCssAsString(compiledResults),
       promise.makeNodeResolver());
   return promise;
+}
+
+
+/**
+ * @param {!Array.<!RECESS>} compiledResults
+ * @return {!Promise} Tracks success/failure.
+ */
+function outputLintResults(compiledResults) {
+  var hadWarningsOrErrors = false;
+  compiledResults.forEach(function(fileResults) {
+    if (fileResults.errors && (fileResults.errors.length > 0)) {
+      hadWarningsOrErrors = true;
+      console.error(fileResults.path + ' had CSS/LESS compilation errors:');
+      console.error(fileResults.errors.join('\n'));
+    }
+    if (fileResults.output && (fileResults.output.length > 0)) {
+      // TODO: Would be nice if RECESS indicated lint success in its API result.
+      // This is a bit fragile.
+      var fileOutput = fileResults.output.join('\n');
+      if (fileOutput.indexOf('Perfect!') < 0) {
+        hadWarningsOrErrors = true;
+        console.error(fileOutput);
+      }
+    }
+  });
+
+  if (hadWarningsOrErrors) {
+    return kew.reject(new Error('Had CSS/LESS issues'));
+  } else {
+    return kew.resolve(null);
+  }
 }
 
 
