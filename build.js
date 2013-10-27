@@ -74,4 +74,5 @@ makeTmpLessDir()
     .then(function() { return kew.all([build3pCss(), buildAppCss()]); })
     .then(buildClosureProject)
     .then(function() { console.log('Project built successfully'); })
-    .fail(function(e) { console.error('Failed to build project: ' + e); });
+    .fail(function(e) { console.error('Failed to build project: ' + e); })
+    .end();
