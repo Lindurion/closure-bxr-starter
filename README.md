@@ -33,6 +33,12 @@ Then view in a web browser at [http://localhost:8080/](http://localhost:8080/).
 
 You can either rerun `build.js` manually after making edits, or you can pass the `--watch` command-line flag when you run the server, which will listen for changes to files under this directory and automatically rebuild the project on next request if any files have changed.
 
+On Mac OS X, you may need to up your ulimit for `--watch` to work (since it opens many child processes):
+
+    $ ulimit -n 4096
+
+Also, some editors seem to work better than others at notifying the OS when a file changes.
+
 Customize input files and output directories for the project by editing `project-config.js`.
 
 
