@@ -8,7 +8,7 @@ Starter [node.js](http://nodejs.org) project using [Closure Tools](http://develo
 - **Express 3**: Node.js HTTP server & web application framework
 - **RECESS**: CSS & [LESS](http://lesscss.org) compiler supporting color constants, functions, mixins, etc.
 
-Also includes [jQuery 2](http://jquery.com) as part of Bootstrap support.
+Also includes [jQuery 1.9](http://jquery.com) as part of Bootstrap support.
 
 
 Status
