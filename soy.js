@@ -36,6 +36,12 @@ function SoyRenderer(rootFileDir, templateNameToFile) {
 }
 
 
+/** Clears all cached templates so that they will be reloaded from disk. */
+SoyRenderer.prototype.invalideCachedTemplates = function() {
+  this.loadedTemplates_ = {};
+};
+
+
 /**
  * Renders a Soy template with the given templateName asynchronously, calling
  * callbackFn with the rendered string on success.

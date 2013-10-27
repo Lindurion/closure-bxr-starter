@@ -32,13 +32,11 @@ Build your JS and CSS (include `--debug` for human-readable output):
 
 Run server:
 
-    $ node server.js [--debug] [--port=8080]
+    $ node server.js [--debug] [--port=8080] [--watch]
 
 Then view in a web browser at [http://localhost:8080/](http://localhost:8080/).
 
-You can either rerun `build.js` manually after making edits, or you can run a script to watch for changes to files under `src/` and automatically rebuild the project when any file is changed:
-
-    $ node watch.js [--debug]
+You can either rerun `build.js` manually after making edits, or you can pass the `--watch` command-line flag when you run the server, which will listen for changes to files under this directory and automatically rebuild the project on next request if any files have changed.
 
 Customize input files and output directories for the project by editing `project-config.js`.
 

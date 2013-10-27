@@ -14,11 +14,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+var child_process = require('child_process');
 var commander = require('commander');
 var express = require('express');
+var nodeWatch = require('node-watch');
 var path = require('path');
 var soy = require('./soy.js');
 var underscore = require('underscore');
+
+
+var EXIT_SUCCESS = 0;
+var app = express();
 
 
 //==============================================================================
@@ -27,12 +33,13 @@ var underscore = require('underscore');
 
 commander
     .option('--debug', 'Run server to server application built in --debug mode')
-    .option('-p, --port <port>', 'Port to run HTTP server on', Number, 8080)
+    .option('--port <port>', 'Port to run HTTP server on', Number, 8080)
+    .option('--watch', 'Watch for changes under this dir and rebuild on demand')
     .parse(process.argv);
 
 
 //==============================================================================
-// Configure & Run HTTP Server
+// Configure Soy Template Rendering
 //==============================================================================
 
 // Configure all server-side rendered Soy templates here.
@@ -41,12 +48,87 @@ var soyRenderer = new soy.SoyRenderer(outDir, {
   'cbxrs.ui.page.soy.main': 'page.js'
 });
 
-
-// Configure express application server for rendering Soy templates.
-var app = express();
 app.disable('view cache');  // SoyRenderer does own caching.
 app.set('views', outDir);
 app.engine('.js', underscore.bind(soyRenderer.render, soyRenderer));
+
+
+//==============================================================================
+// Watch for File Changes & Trigger Rebuilds
+//==============================================================================
+
+function rebuild(callbackFn) {
+  console.log('Rebuilding project, changes detected since last build...\n');
+  soyRenderer.invalideCachedTemplates();
+
+  var args = [path.join(__dirname, 'build.js')];
+  if (commander.debug) {
+    args.push('--debug');
+  }
+  var projectBuilder = child_process.spawn('node', args, {stdio: 'inherit'});
+  projectBuilder.on('close', function(exitCode) {
+    if (exitCode != EXIT_SUCCESS) {
+      callbackFn(new Error('Rebuilding project failed'));
+    } else {
+      console.log('\nRebuilding project succeeded...');
+      callbackFn(null);
+    }
+  });
+}
+
+
+// Ignore changes to files under gen/, tmp/, and build/ to avoid change cycles.
+var IGNORE_CHANGES = /(gen|tmp|build)[/\\]/;
+
+
+if (commander.watch) {
+  var needsRebuild = false;
+  var rebuildInProgress = false;
+  var lastRebuildFailed = false;
+
+  nodeWatch(__dirname, {persistent: false}, function(fileName) {
+    if (IGNORE_CHANGES.test(fileName)) {
+      return;
+    }
+
+    // Some file under this directory changed.
+    needsRebuild = true;
+  });
+
+  // Install this middleware to check if rebuild is needed before each request.
+  var pendingContinueFns = [];
+  app.use(function(req, res, continueFn) {
+    if (!needsRebuild) {
+      if (lastRebuildFailed) {
+        throw new Error('Last project rebuild failed. Fix errors & try again.');
+      }
+      continueFn(null);
+      return;
+    }
+
+    pendingContinueFns.push(continueFn);
+
+    if (!rebuildInProgress) {
+      rebuildInProgress = true;
+      rebuild(function(err) {
+        rebuildInProgress = false;
+        needsRebuild = false;
+        lastRebuildFailed = !!err;
+        pendingContinueFns.forEach(function(fn) { fn(err); });
+        pendingContinueFns = [];
+      });
+    }
+  });
+
+  console.log('Watching for file changes under this dir...');
+} else {
+  console.log('Not watching for file changes...');
+}
+
+
+//==============================================================================
+// Configure HTTP Request Path Handlers
+//==============================================================================
 
 // Main page:
 app.get('/', function(req, res) {
@@ -62,6 +144,19 @@ app.get('/main.js', function(req, res) {
 app.get('/style.css', function(req, res) {
   res.sendfile(path.join(outDir, 'style.css'));
 });
+
+// Error page:
+app.use(function(err, req, res, next) {
+  console.error('Request had failures:\n' + err);
+  res.send(500,
+      'Sorry :( something went wrong. Tell whoever runs this site to check ' +
+      'their server logs (and to install a prettier error page).');
+});
+
+
+//==============================================================================
+// Start Accepting Requests
+//==============================================================================
 
 console.log('Listening for HTTP requests on port ' + commander.port);
 app.listen(commander.port);
