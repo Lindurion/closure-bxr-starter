@@ -16,7 +16,7 @@
 
 var child_process = require('child_process');
 var kew = require('kew');
-var lessBuilder = require('./less-builder.js');
+var lessBuilder = require('./lib/less-builder.js');
 var path = require('path');
 var projectConfig = require('./project-config.js');
 var recess = require('recess');

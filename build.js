@@ -14,10 +14,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-var closureProjectBuilder = require('./closure-project-builder.js');
+var closureProjectBuilder = require('./lib/closure-project-builder.js');
 var commander = require('commander');
 var kew = require('kew');
-var lessBuilder = require('./less-builder.js');
+var lessBuilder = require('./lib/less-builder.js');
 var mkdirp = require('mkdirp');
 var path = require('path');
 var projectConfig = require('./project-config.js');

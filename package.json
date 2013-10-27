@@ -1,6 +1,6 @@
 {
   "name": "closure-bxr-starter",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "private": "true",
   "description": "Starter node.js project using Closure Tools, Bootstrap, Express, and RECESS.",
   "keywords": [

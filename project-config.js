@@ -65,7 +65,7 @@ var JS_MODULES = {
 // (e.g. for loading jQuery via CDN).
 var JS_EXTERNS = [
   closureProBuild.EXTERNS['jquery-1.9'],
-  'jquery-bootstrap-externs.js'
+  'externs/jquery-bootstrap-externs.js'
 ];
 
 

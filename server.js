@@ -20,7 +20,7 @@ var express = require('express');
 var nodeWatch = require('node-watch');
 var path = require('path');
 var projectConfig = require('./project-config.js');
-var soy = require('./soy.js');
+var soy = require('./lib/soy.js');
 var underscore = require('underscore');
 
 
