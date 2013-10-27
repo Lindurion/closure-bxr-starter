@@ -43,7 +43,7 @@ Customize input files and output directories for the project by editing `project
 
 ### System Requirements ###
 
-Java and Python version 2 must be installed and part of the system path as `java` and `python` in order to run all Closure tools. These commands are also configurable; see [closure-pro-build documentation](http://github.com/Lindurion/closure-pro-build#system-requirements) for more details.
+Java 7+ and Python version 2 must be installed and part of the system path as `java` and `python` in order to run all Closure tools. These commands are also configurable; see [closure-pro-build documentation](http://github.com/Lindurion/closure-pro-build#system-requirements) for more details.
 
 
 License & Copyright
