@@ -19,6 +19,7 @@ var commander = require('commander');
 var express = require('express');
 var nodeWatch = require('node-watch');
 var path = require('path');
+var projectConfig = require('./project-config.js');
 var soy = require('./soy.js');
 var underscore = require('underscore');
 
@@ -43,7 +44,8 @@ commander
 //==============================================================================
 
 // Configure all server-side rendered Soy templates here.
-var outDir = commander.debug ? './build/debug' : './build/release';
+var outDir = path.join(__dirname, projectConfig.OPTIONS.outputDir,
+    commander.debug ? 'debug/' : 'release/');
 var soyRenderer = new soy.SoyRenderer(outDir, {
   'cbxrs.ui.page.soy.main': 'page.js'
 });
@@ -77,8 +79,16 @@ function rebuild(callbackFn) {
 }
 
 
-// Ignore changes to files under gen/, tmp/, and build/ to avoid change cycles.
-var IGNORE_CHANGES = /(gen|tmp|build)[/\\]/;
+function normalizePath(path) {
+  return path.replace(/\\/g, '/');
+}
+
+
+// Ignore changes to files under output directories to avoid change cycles.
+var IGNORE_CHANGES = new RegExp(
+    '(' + normalizePath(projectConfig.OPTIONS.generatedCodeDir) + '|' +
+    normalizePath(projectConfig.OPTIONS.tempFileDir) + '|' +
+    normalizePath(projectConfig.OPTIONS.outputDir) + ')');
 
 
 if (commander.watch) {
@@ -87,7 +97,7 @@ if (commander.watch) {
   var lastRebuildFailed = false;
 
   nodeWatch(__dirname, {persistent: false}, function(fileName) {
-    if (IGNORE_CHANGES.test(fileName)) {
+    if (IGNORE_CHANGES.test(normalizePath(fileName))) {
       return;
     }
 

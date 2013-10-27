@@ -30,7 +30,7 @@
     "mkdirp": ">=0.3.0 <1.0",
     "node-watch": ">=0.3.0 <1.0",
     "recess": ">=1.1.0 <2.0",
-    "underscore": ">=1.5.0 < 2.0"
+    "underscore": ">=1.5.0 <2.0"
   },
   "engines": {
     "node": ">=0.10.3"

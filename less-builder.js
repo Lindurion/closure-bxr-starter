@@ -16,6 +16,7 @@ var closureProBuild = require('closure-pro-build');
 var fs = require('fs');
 var kew = require('kew');
 var recess = require('recess');
+var underscore = require('underscore');
 
 
 /**
@@ -30,7 +31,7 @@ function build(inputFiles, includeDirs, options, outputFile) {
   return resolveLessInputFiles(inputFiles)
       .then(function(resolvedInputFiles) {
         return compile(resolvedInputFiles, includeDirs, options);
-      }).then(writeCssToFile.bind(null, outputFile));
+      }).then(underscore.partial(writeCssToFile, outputFile));
 }
 
 
